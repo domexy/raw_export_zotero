@@ -96,9 +96,9 @@ def getSourceItemKeys(itemID,itemKey,path):
 
 
 def adjustName(name):
-    if os.name = "nt":
+    if os.name == "nt":
         name = name.translate(None, '<>:"\/|?*').encode('cp1252')
-    elif os.name = "posix":
+    elif os.name == "posix":
         name = name.translate(None, '<>:"\/|?*').encode('utf-8')
     return name
 
@@ -117,6 +117,6 @@ def getChildCollections(currentCollection,exportPath):
         
 conn = sqlite3.connect('zotero.sqlite')
 cursor = conn.cursor()
-STORAGEPATH="E:\\Zotero\\storage\\"
-EXPORTBASEPATH = "E:\\"
+STORAGEPATH=os.getcwd()+"\\storage\\"
+EXPORTBASEPATH = raw_input("Enter the path you want to export to:\n")
 init()
