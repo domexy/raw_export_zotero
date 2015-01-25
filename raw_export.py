@@ -14,6 +14,7 @@ def init():
     cursor.execute(sql)
     startingCollection = cursor.fetchone()
     exportCollection(startingCollection,EXPORTBASEPATH)
+    conn.close()
     print("Export Complete")
 
 
