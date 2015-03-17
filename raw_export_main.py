@@ -48,7 +48,7 @@ def exportCollection(currentCollection,exportPath,storagePath,cursor):
                 exportCollection(childCollection,exportPath,storagePath,cursor)
 
 
-def exportByTags():
+def exportByTags(EXPORTBASEPATH,STORAGEPATH,cursor):
     #Mockup:
     #Let user input Tags
     #Query Tags to validate existence
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             exportCollection("",EXPORTBASEPATH,STORAGEPATH,cursor)
         elif exporttype == "2":
             validinput = True
-            exportByTags(EXPORTBASEPATH,STORAGEPATH,cursor) #TODO: Add Parameters
+            exportByTags(EXPORTBASEPATH,STORAGEPATH,cursor)
         else:
             print ("WARNING: Invalid Input!")
         
