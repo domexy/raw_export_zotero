@@ -3,6 +3,7 @@
 
 import sqlite3
 import os
+import os.path
 import shutil
 from raw_export_base import exportMultipleItems 
 
@@ -17,7 +18,7 @@ def exportCollection(currentCollection,exportPath,storagePath,cursor):
                 sql = "SELECT collectionID FROM collections WHERE collectionName = \""+CollectionToExport+"\""
                 cursor.execute(sql)
                 startingCollection = cursor.fetchone()
-                if startingCollection != None:
+                if startingCollection == None:
                     print ("WARNING: Collection does not exist!")
                 else:
                     validinput == True
@@ -28,7 +29,8 @@ def exportCollection(currentCollection,exportPath,storagePath,cursor):
         sql = "SELECT collectionName FROM collections WHERE collectionID = "+str(currentCollection[0])
         cursor.execute(sql)
         CollectionName = cursor.fetchone()
-        exportPath = exportPath+"\\"+str(CollectionName[0])
+        #exportPath = exportPath+"\\"+str(CollectionName[0])
+        exportPath = os.path.join(exportPath,str(CollectionName[0]))
         os.mkdir(exportPath)
         print(exportPath)
 
@@ -91,7 +93,8 @@ def exportByTags(exportPath,storagePath,cursor):
 if __name__ == '__main__':    
     validinput = False
     while validinput == False:
-        STORAGEPATH=os.getcwd()+"\\storage\\"
+        #STORAGEPATH=os.getcwd()+"\\storage\\"
+        STORAGEPATH=os.path.join(os.getcwd(),"storage")
         EXPORTBASEPATH = raw_input("Enter the path you want to export to: (default = current path)\n")
         if EXPORTBASEPATH == "":
             EXPORTBASEPATH = os.getcwd()

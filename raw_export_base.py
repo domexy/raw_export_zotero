@@ -4,6 +4,7 @@
 import sqlite3
 import os
 import shutil
+import os.path
 
 
 
@@ -20,9 +21,12 @@ def exportMultipleItems(itemIDs,exportPath,storagePath,cursor):
 
 
 def exportItem(itemID,itemKey,exportPath,storagePath,cursor):
-    if os.access(storagePath+"\\"+str(itemKey[0]), os.F_OK): #This effectively checks if the Item is a single file or a Zotero object (eg. Book )
+    #if os.access(storagePath+"\\"+str(itemKey[0]), os.F_OK): This effectively checks if the Item is a single file or a Zotero object (eg. Book )
+    print("accesspath = "+os.path.join(storagePath,str(itemKey[0])))
+    if os.access(os.path.join(storagePath,str(itemKey[0])), os.F_OK): #This effectively checks if the Item is a single file or a Zotero object (eg. Book )
         #remove Zotero based files
         directoryFiles = os.listdir(storagePath+str(itemKey[0]))
+        print("files = "+directoryFiles)
         if ".zotero-ft-cache" in directoryFiles:
             directoryFiles.remove(".zotero-ft-cache")
         if ".zotero-ft-info" in directoryFiles:
@@ -32,7 +36,8 @@ def exportItem(itemID,itemKey,exportPath,storagePath,cursor):
         if len(directoryFiles) > 1:
             exportPath = makeExtraDirectory(itemID,exportPath,cursor)          
         for fileName in directoryFiles:
-            shutil.copy2(storagePath+str(itemKey[0])+"\\"+fileName,exportPath)
+            #shutil.copy2(storagePath+str(itemKey[0])+"\\"+fileName,exportPath)
+            shutil.copy2(os.path.join(storagePath,str(itemKey[0]),fileName),exportPath)
         print("Copying "+ fileName)
     else:
         #get SourceItemKeys
@@ -66,7 +71,8 @@ def makeExtraDirectory(itemID,oldPath,cursor):
         newTitle = title[0].translate('<>:"\/|?*').encode('cp1252')
     elif os.name == "posix":
         newTitle = title[0].translate('<>:"\/|?*').encode('utf-8')
-    newPath = oldPath +"\\"+ newTitle
+    #newPath = oldPath +"\\"+ newTitle
+    newPath = os.path.join(oldPath,newTitle)
     os.mkdir(newPath)
     print (newPath)
     return newPath
