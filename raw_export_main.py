@@ -36,7 +36,7 @@ def exportCollection(currentCollection,exportPath,storagePath,cursor):
         sql = "SELECT itemID FROM collectionitems WHERE collectionID = "+str(currentCollection[0])
         cursor.execute(sql)
         itemIDs = cursor.fetchall()
-        raw_export.exportMultipleItems(itemIDs)
+        exportMultipleItems(itemIDs,exportPath,storagePath,cursor)
 
         #repeat for child Collections
         sql = "SELECT collectionID FROM collections WHERE parentCollectionID = "+str(currentCollection[0])
@@ -48,30 +48,36 @@ def exportCollection(currentCollection,exportPath,storagePath,cursor):
                 exportCollection(childCollection,exportPath,storagePath,cursor)
 
 
-def exportByTags(EXPORTBASEPATH,STORAGEPATH,cursor):
+def exportByTags(exportPath,storagePath,cursor):
 
     validinput = False
-            while validinput == False:
-                RawTagsToExport = raw_input("Enter the Tags you would like to export by (separated by , ):\n")
-                TagsToExport =
-                for Tag in TagsToExport:
-                    #get tagIDs
-                    sql = "SELECT tagID FROM tags WHERE name = \""+Tag+"\""
-                    cursor.execute(sql)
-                    TagID = cursor.fetchone()
-
-                    #get itemIDs with corresponding tagIDs
-                    sql = "SELECT itemID FROM itemtags WHERE tagID = \""+TagID+"\""
-                    cursor.execute(sql)
-                    ItemIDs = cursor.fetchall()
-
-                    #only reprompt input if all tags are invalid
-                    if startingCollection != None:
-                        print ("WARNING: Tag \""+Tag+"\" does not exist!")
-                    else:
-                        validinput == True
-                        raw_export.exportMultipleItems(ItemIDs)
+    while validinput == False:
+        RawTagsToExport = raw_input("Enter the Tags you would like to export by (separated by , ):\n")
+        TagsToExport = RawTagsToExport.split(',')
+        if TagsToExport == None:
+            print ("WARNING: You need to input Tags")
+        else:
+            validinput == True
             
+        for Tag in TagsToExport:
+            #get tagIDs
+            sql = "SELECT tagID FROM tags WHERE name = \""+Tag+"\""
+            cursor.execute(sql)
+            TagID = cursor.fetchone()
+
+            print("TagID = "+str(TagID[0]))
+            #get itemIDs with corresponding tagIDs
+            sql = "SELECT itemID FROM itemtags WHERE tagID = \""+str(TagID[0])+"\""
+            cursor.execute(sql)
+            ItemIDs = cursor.fetchall()
+
+            print("ItemIDs = "+ str(ItemIDs))
+            
+            if ItemIDs == None:
+                print ("WARNING: Tag \""+Tag+"\" does not exist!")
+            else:
+                exportMultipleItems(ItemIDs,exportPath,storagePath,cursor)
+    
 
     #Mockup:
     #Let user input Tags
