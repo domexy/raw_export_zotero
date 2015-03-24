@@ -49,6 +49,30 @@ def exportCollection(currentCollection,exportPath,storagePath,cursor):
 
 
 def exportByTags(EXPORTBASEPATH,STORAGEPATH,cursor):
+
+    validinput = False
+            while validinput == False:
+                RawTagsToExport = raw_input("Enter the Tags you would like to export by (separated by , ):\n")
+                TagsToExport =
+                for Tag in TagsToExport:
+                    #get tagIDs
+                    sql = "SELECT tagID FROM tags WHERE name = \""+Tag+"\""
+                    cursor.execute(sql)
+                    TagID = cursor.fetchone()
+
+                    #get itemIDs with corresponding tagIDs
+                    sql = "SELECT itemID FROM itemtags WHERE tagID = \""+TagID+"\""
+                    cursor.execute(sql)
+                    ItemIDs = cursor.fetchall()
+
+                    #only reprompt input if all tags are invalid
+                    if startingCollection != None:
+                        print ("WARNING: Tag \""+Tag+"\" does not exist!")
+                    else:
+                        validinput == True
+                        raw_export.exportMultipleItems(ItemIDs)
+            
+
     #Mockup:
     #Let user input Tags
     #Query Tags to validate existence
