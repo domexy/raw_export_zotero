@@ -25,8 +25,8 @@ def exportItem(itemID,itemKey,exportPath,storagePath,cursor):
     print("accesspath = "+os.path.join(storagePath,str(itemKey[0])))
     if os.access(os.path.join(storagePath,str(itemKey[0])), os.F_OK): #This effectively checks if the Item is a single file or a Zotero object (eg. Book )
         #remove Zotero based files
-        directoryFiles = os.listdir(storagePath+str(itemKey[0]))
-        print("files = "+directoryFiles)
+        directoryFiles = os.listdir(storagePath+"\\"+str(itemKey[0]))
+        #print("files = "+directoryFiles)
         if ".zotero-ft-cache" in directoryFiles:
             directoryFiles.remove(".zotero-ft-cache")
         if ".zotero-ft-info" in directoryFiles:
